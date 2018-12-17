@@ -19,6 +19,7 @@
 	transform-origin:50% 50% -967px;
 	background:transparent;
 	z-index:3;
+	cursor:pointer;
 }
 .box-right{
 	position:absolute;
@@ -61,7 +62,13 @@
 	cursor:pointer;
 }
 
-.box-item-active{
+.box-item:hover{
+	border-radius:50%;
+	opacity:0.7;
+	cursor:pointer;
+}
+
+.active{
 	border-radius:50%;
 	opacity:0.7;
 	cursor:pointer;
