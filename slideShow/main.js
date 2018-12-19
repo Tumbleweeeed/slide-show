@@ -44,7 +44,7 @@ console.log(img[1]);
 for(var i=0;i<img.length;i++){
 	(function(i){
 			dot[i].onclick = function(){
-				slide.style.transform = "rotateY("+ i*k +"deg)";
+				slide.style.transform = "rotateY("+ (j-i)*k +"deg)";
 				removeClass();
 				dot[i].classList.add('active');
 				j=i;
