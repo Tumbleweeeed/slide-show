@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>drag</title>
+	<style>
+		.box1{
+			position:absolute;
+			width:200px;
+			height:200px;
+			background:#ccc;
+		}
+		.box2{
+			position:absolute;
+			width: 200px;
+			height: 200px;
+			background: #eee;
+			left: 300px;
+		}
+		input{
+			position: relative;
+			display:inline-block;
+		}
+		*{
+			margin:0;
+			padding:0;
+		}
+	</style>
+</head>
+<body>
+	<div class="screen1">
+		<div class="box1"></div>
+		<div class="box2"></div>
+		<input type="button" value="撤回">
+	</div>
+</body>
+<script type="text/javascript">
+	var box1 = document.querySelector(".box1");
+	box1.onmousedown = function(e){
+		e.preventDefault();
+		var e = e||window.event;
+		var posX = e.clientX - box1.offsetLeft;
+		var posY = e.clientY - box1.offsetTop;
+		document.onmousemove = function(e){
+			var e = e||window.event;
+			var relX = e.clientX - posX;
+			var relY = e.clientY - posY;
+			box1.style.left = relX + "px";
+			box1.style.top = relY + "px";
+		}
+		document.onmouseup = function(){
+			document.onmousedown = null;
+			document.onmousemove = null;
+		}
+	}
+
+	// 回溯盒子
+
+</script>
+</html>
