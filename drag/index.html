@@ -19,7 +19,8 @@
 		}
 		input{
 			position: relative;
-			display:inline-block;
+			top:210px;
+			left:300px;
 		}
 		*{
 			margin:0;
@@ -29,9 +30,9 @@
 </head>
 <body>
 	<div class="screen1">
-		<div class="box1"></div>
-		<div class="box2"></div>
-		<input type="button" value="撤回">
+		<div class="box1">拽我</div>
+		<div class="box2">拽我</div>
+		<input type="button" value="回溯">
 	</div>
 </body>
 <script type="text/javascript">
@@ -55,6 +56,46 @@
 	}
 
 	// 回溯盒子
+	var box2 = document.querySelector(".box2");
+	var btn = document.querySelector('input');
+	console.log(btn);
+	var way = new Array();
+	box2.onmousedown = function(e){
+		var e = e || window.event;
+		var posX = e.clientX - box2.offsetLeft;
+		var posY = e.clientY - box2.offsetTop;
+		document.onmousemove = function(e){
+			var e = e||window.event;
+			var relX = e.clientX - posX;
+			var relY = e.clientY - posY;
+			way.push(
+					{
+						left:relX,
+						top:relY,
+					}
+				)
+			box2.style.left = relX + 'px';
+			box2.style.top = relY + 'px';
+			console.log(way);
+		}
+		document.onmouseup = function(){
+			document.onmousedown = null;
+			document.onmousemove = null;
+		}
+	}
 
+	btn.onclick = function(){
+		var i = 0;
+		way.reverse();
+		var time = setInterval(()=>{
+					box2.style.left = way[i].left + 'px';
+					box2.style.top = way[i].top + 'px';
+					i++;
+						if(i == way.length){
+						clearInterval(time);
+						way = [];
+					  }
+				},30)
+			}
 </script>
 </html>
