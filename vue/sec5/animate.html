@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>animate</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<link rel="stylesheet" type="text/css" href="./animate.css">
+	<style>
+		.fade-enter,
+		.fade-leave-to{
+			opacity:0;
+		}
+		.fade-enter-active,
+		.fade-leave-active{
+			transition:opacity 2s;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<div :style="limit">
+			<transition name="fade"
+						type="transition"
+						enter-active-class="animated zoomIn fade-enter-active" 
+						leave-active-class="animated pulse fade-leave-active">
+				<div v-show="show">{{content}}</div>
+			</transition>
+		</div>
+		<button :style="styleBtn" @click="taggleText">change</button>
+	</div>
+</body>
+<script>
+	var app = new Vue({
+		el:"#app",
+		data:{
+			show:true,
+			content:"Happy New Year!",
+			limit:{
+				height:"70px",
+				color:"#aaa",
+				fontSize:"40px"
+			},
+			styleBtn:{
+				background:"rgba(255, 203, 203, 1)",
+				border:"0",
+				width:"100px",
+				height:"40px",
+				fontSize:"20px",
+				borderRadius:"10px"
+			}
+		},
+		methods:{
+			taggleText:function(){
+				this.show = !this.show
+			}
+		}
+	})
+</script>
+</html>

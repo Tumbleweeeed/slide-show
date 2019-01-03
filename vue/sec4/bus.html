@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>bus</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+	<div id="app">
+		<child count="dell"></child>
+		<child count="Lee"></child>
+	</div>
+		<div style="width:100%;height:10px;background:black;border-radius:5px"></div>
+	<div id="app2">
+		<childent>
+			<template slot-scope="dataNo">
+				<h1>{{dataNo.item}}</h1>
+			</template>
+		</childent>
+	</div>
+			<div style="width:100%;height:10px;background:black;border-radius:5px"></div>
+	<div id="app3">
+		<component :is="type"></component>
+		<button @click="taggleChild">change it</button>
+	</div>
+</body>
+<script>
+	Vue.prototype.bus = new Vue()
+
+	Vue.component("child",{
+		props:["count"],
+		data:function(){
+			return{
+				selfCount:this.count
+			}
+		},
+		template:"<div @click='sendData'>{{selfCount}}</div>",
+		methods:{
+			sendData:function(){
+				this.bus.$emit("change",this.selfCount)
+			}
+		},
+		mounted:function(mes){
+			var this_ = this
+			this.bus.$on("change",function(mes){
+				this_.selfCount = mes
+			})
+		}
+	})
+
+	var app = new Vue({
+		el:"#app"
+	})
+
+	Vue.component("childent",{
+		data:function(){
+			return{
+				list:[1,2,3,4,5]
+			}
+		},
+		template:`<div>
+					<ul>
+						<slot v-for="item of list" :item=item></slot>
+					</ul>
+				  </div>`
+	})
+
+	var app2 = new Vue({
+		el:"#app2"
+	})
+
+	Vue.component("child-one",{
+		template:`<div>child-one</div>`
+	})
+
+	Vue.component("child-two",{
+		template:`<div>child-two</div>`
+	})
+
+	var app3 = new Vue({
+		el:"#app3",
+		data:{
+			type:"child-one"
+		},
+		methods:{
+			taggleChild:function(){
+				this.type = this.type==="child-one"?this.type="child-two" : this.type="child-one"
+			}
+		}
+	})
+</script>
+</html>

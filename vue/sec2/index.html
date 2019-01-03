@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>sec2</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+	<div id="app">
+		{{ a }}
+	<button v-on:click = "a = 5">change value</button>
+	</div>
+	<div style="width: 100%;height: 10px;border-radius:5px;background: black;margin-top:20px"></div>
+	<div id="app1">
+		<p>using mustaches:  {{ mes }}</p>
+		<p>using v-html: <span v-html = "mes"></span></p>
+	</div>
+	<div style="width: 100%;height: 10px;border-radius:5px;background: black"></div>
+	<div id="app2">
+		<p>This message is: {{ mes }} </p>
+		<p>reverse message: {{ mes.split('').reverse().join('') }}</p>
+		<p>reverse Mes: {{ reverseMes }}</p>
+	</div>
+	<div style="width: 100%;height: 10px;border-radius:5px;background: black"></div>
+	<div id="app3">
+		<p>Ask a yes/no question:</p>
+		<input type="text" v-model="question">
+		<p>{{ answer }}</p>
+	</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+<script>
+	var obj = {
+		a : 1
+	}
+
+	new Vue({
+		el:"#app",
+		data:obj
+	})
+
+	new Vue({
+		el:"#app1",
+		data:{
+			mes : "<span style='color:red'>this should be red.<span>"
+		}
+	})
+
+	var app2 =  new Vue({
+					el:"#app2",
+					data:{
+						mes:"hello world"
+					},
+					computed:{
+						reverseMes:function(){
+							return this.mes.split('').reverse().join('');
+						}
+					}
+				})
+
+
+	var app3 = new Vue({
+		el:"#app3",
+		data:{
+			question:'',
+			answer:'I cannot give you an answer until you ask a question!'
+		},
+		watch:{
+			question:function(newQuestion,oldQuestion){
+				this.answer = "Waiting for your typing....."
+				this.debouncedAnswer()
+			}
+		},
+		created:function(){
+			this.debouncedAnswer = _.debounce(this.getAnswer,500)
+		},
+		 methods: {
+	    getAnswer: function () {
+	      if (this.question.indexOf('?') === -1) {
+	        this.answer = 'Questions usually contain a question mark. ;-)'
+	        return
+	      }
+	      this.answer = 'Thinking...'
+	      var vm = this
+	      axios.get('https://yesno.wtf/api')
+	        .then(function (response) {
+	          vm.answer = _.capitalize(response.data.answer)
+	        })
+	        .catch(function (error) {
+	          vm.answer = 'Error! Could not reach the API. ' + error
+	        })
+	    }
+	  }
+	})
+</script>
+</html>

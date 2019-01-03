@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>getter/setter</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+	<div id="app">
+		{{ fullName }}
+	</div>
+		<div style="width: 100%;height: 10px;border-radius:5px;background: black"></div>
+	<!-- 计数 -->
+	<div id="app2">
+		<counting ref="one" @change="addChange"></counting>
+		<counting ref="two" @change="addChange"></counting>
+		<div>{{add}}</div>
+	</div>
+			<div style="width: 100%;height: 10px;border-radius:5px;background: black"></div>
+	<div id="app3">
+		<counter :count="2" @change="countNo"></counter>
+		<counter :count="4" @change="countNo"></counter>
+		<div>{{total}}</div>
+	</div>
+</body>
+<script>
+	var app = new Vue({
+		el:"#app",
+		data:{
+			firstName:"Mike",
+			lastName:"Wang"
+		},
+		computed:{
+			fullName:{
+				get:function(){
+					return this.firstName + " " + this.lastName
+				},
+				set:function( value ){
+					var arr = value.split(" ");
+					this.firstName = arr[0];
+					this.lastName = arr[1];
+				}
+			}
+		}
+	})
+
+	// 计数
+	Vue.component("counting",{
+		template:"<div @click='countingNo'>{{number}}</div>",
+		data:function(){
+			return{
+				number:0
+			}
+		},
+		methods:{
+			countingNo:function(){
+				this.number++
+				this.$emit("change")
+			}
+		}
+	})
+
+	var app2 = new Vue({
+		el:"#app2",
+		data:{
+			add:0
+		},
+		methods:{
+			addChange:function(){
+				this.add = this.$refs.one.number + this.$refs.two.number
+			}
+		}
+	})
+
+	var counter = {
+		props:["count"],
+		data:function(){
+			return{
+				nob : this.count
+			}
+		},
+		template:"<div @click='sendNo'>{{nob}}</div>",
+		methods:{
+			sendNo:function(){
+				this.nob+=this.count
+				this.$emit('change', this.count)
+			}
+		}
+	}
+
+	var app3 = new Vue({
+		el:"#app3",
+		components:{
+			counter:counter
+		},
+		data:{
+			total:6
+		},
+		methods:{
+			countNo:function(step){
+				this.total += step
+			}
+		}
+	})
+</script>
+</html>
